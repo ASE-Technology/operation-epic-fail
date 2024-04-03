@@ -16,7 +16,7 @@ async function register(req, res, next) {
             return res.status(409).send("User with this email already exists");
         }
 
-        await service.register(user);
+        await repository.register(user);
         res.send(200);
     } catch (err) {
         console.error(`Error while getting entity`, err.message);

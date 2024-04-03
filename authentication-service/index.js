@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const port = 3000;
+const port = 3001;
 const dbUtil = require('./utils/db.util');
 const authRoute = require('./routes/authentication.route');
 const cors = require("cors");
@@ -8,7 +8,7 @@ const cors = require("cors");
 app.use(express.json());
 app.use(cors({
   origin: 'http://localhost'
-}));
+})); 
 
 app.use('/authentication', authRoute);
 
