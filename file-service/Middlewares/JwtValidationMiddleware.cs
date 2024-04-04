@@ -1,6 +1,7 @@
-﻿using Newtonsoft.Json;
+﻿using file_service.Models.Interfaces.Services;
+using file_service.Models.Users;
+using Newtonsoft.Json;
 using System.Net;
-using System.Text;
 
 namespace file_service.Middlewares
 {
@@ -17,25 +18,29 @@ namespace file_service.Middlewares
             _httpClient = new HttpClient();
         }
 
-        public async Task Invoke(HttpContext context)
+        public async Task Invoke(HttpContext context, IAuthService authService)
         {
-            var token = context.Request.Headers["Authorization"].ToString();
+            var authorizationHeader = context.Request.Headers["Authorization"];
 
-            if (!string.IsNullOrEmpty(token))
+            if (!string.IsNullOrEmpty(authorizationHeader))
             {
-                var splitAuthorizationValue = token.Split(' ');
-                if (splitAuthorizationValue.Length == 2)
-                {
-                    var body = new { token = splitAuthorizationValue[1] };
-                    var content = new StringContent(JsonConvert.SerializeObject(body), Encoding.UTF8, "application/json");
-                    var response = await _httpClient.PostAsync($"{_authenticationServiceUrl}/verify-token", content);
+                _httpClient.DefaultRequestHeaders.Authorization = System.Net.Http.Headers.AuthenticationHeaderValue.Parse(authorizationHeader);
 
-                    if (response.IsSuccessStatusCode)
+                var response = await _httpClient.GetAsync($"{_authenticationServiceUrl}/profile");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var userContent = await response.Content.ReadAsStringAsync();
+                    var currentUser = JsonConvert.DeserializeObject<User>(userContent);
+
+                    if (currentUser != null)
                     {
+                        authService.SetCurrentUser(currentUser);
+
                         await _next(context);
                         return;
                     }
-                }                
+                }
             }
 
             context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;

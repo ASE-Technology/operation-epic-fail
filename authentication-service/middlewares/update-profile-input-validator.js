@@ -1,7 +1,9 @@
 const Joi = require('@hapi/joi');
 
 const schema = Joi.object({
-  token: Joi.string().required()
+  email: Joi.string().email().required(),
+  newPassword: Joi.string().min(6).max(30).required(),
+  oldPassword: Joi.string().min(6).max(30).required(),
 });
 
 const validate = (req, res, next) => {
