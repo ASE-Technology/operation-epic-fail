@@ -19,7 +19,7 @@ async function register(req, res, next) {
         await repository.register(user);
         res.send(200);
     } catch (err) {
-        console.error(`Error while getting entity`, err.message);
+        console.error(`Error while register`, err.message);
         next(err);
     }
 }
@@ -55,29 +55,46 @@ async function login(req, res, next) {
             accessToken: token
         });
     } catch (err) {
-        console.error(`Error while getting entities`, err.message);
+        console.error(`Error while login`, err.message);
         next(err);
     }
 }
 
-async function verifyToken(req, res, next) {
+async function updateProfile(req, res, next) {
     try {
-        const token = {
-            token: req.body.token
+        const updateProfile = {
+            email: req.body.email,
+            newPassword: req.body.newPassword,
+            oldPassword: req.body.oldPassword,
         }
 
-        jwt.verify(token.token, jwtConfig.SECRET, (err, decoded) => {
-            if (err) {
-                return res.status(401).send({ message: "Unauthorized!" });
-            }
+        const userToUpdate = await repository.getUserById(req.user.id);
+        if (!userToUpdate) {
+            return res.status(404).send("User not found");
+        }
 
-            res.send({
-                id: decoded.id,
-                email: decoded.email
-            });
-        });
+        const passwordIsValid = bcrypt.compareSync(updateProfile.oldPassword, userToUpdate.password);
+        if (!passwordIsValid) {
+            return res.status(404).send("Wrong old password");
+        }
+
+        userToUpdate.email = updateProfile.email;
+        userToUpdate.password = bcrypt.hashSync(updateProfile.newPassword);
+
+        await repository.updateUser(req.user.id, userToUpdate);
+        res.status(201).send();
+
     } catch (err) {
-        console.error(`Error while getting entities`, err.message);
+        console.error(`Error while updating profile`, err.message);
+        next(err);
+    }
+}
+
+async function getProfile(req, res, next) {
+    try {
+        res.send(req.user);
+    } catch (err) {
+        console.error(`Error while getting profile`, err.message);
         next(err);
     }
 }
@@ -85,5 +102,6 @@ async function verifyToken(req, res, next) {
 module.exports = {
     register,
     login,
-    verifyToken,
+    updateProfile,
+    getProfile
 };
