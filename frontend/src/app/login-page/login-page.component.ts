@@ -31,10 +31,9 @@ export class LoginPageComponent implements OnInit {
 
   login() {
     if (this.loginForm.valid) {
-      const headers = new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('token')}`);
-      this.apiService.login(this.loginForm.value, headers).subscribe({
-      next: (resp: any) => {
-        localStorage.setItem('token', resp.token);
+      this.apiService.login(this.loginForm.value).subscribe({
+      next: (res: any) => {
+        localStorage.setItem('token', res.accessToken);
         this.router.navigate(['/profile']);
       },
       error: () => {
