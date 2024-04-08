@@ -1,0 +1,49 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+  }
+  .background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('https://mdbootstrap.com/img/Photos/Others/images/76.jpg');
+    z-index: -1;
+  }
+  .login-container {
+    position: relative;
+    max-width: 400px;
+    margin: 100px auto;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent background */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  .login-container h2 {
+    font-weight: 400;
+    text-align: center;
+  }
+  .login-container form {
+    margin-top: 20px;
+  }
+  .login-container input[type="email"],
+  .login-container input[type="password"] {
+    width: 100%;
+    padding: 10px 35px 10px 10px; /* Add padding for the icon */
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  .login-container button[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+  }
+  .login-container button[type="submit"]:hover {
+    background-color: #0056b3;
+  }
