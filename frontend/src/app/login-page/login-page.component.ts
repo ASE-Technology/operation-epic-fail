@@ -1,17 +1,44 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ApiService } from '../services/api.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-login-page',
   standalone: true,
-  imports: [],
+  imports: [CommonModule,ReactiveFormsModule],
   templateUrl: './login-page.component.html',
-  styleUrl: './login-page.component.css'
+  styleUrls: ['./login-page.component.css']
 })
-export class LoginPageComponent {
-  constructor(private router: Router) { }
+export class LoginPageComponent implements OnInit {
+  loginForm!: FormGroup;
+  errorMessage = '';
 
-  navigateToRegister(): void {
-    this.router.navigate(['/register']);
+  constructor(
+    private formBuilder: FormBuilder,
+    private apiService: ApiService, 
+    private router: Router) {
+  }
+
+  ngOnInit(): void {
+    this.loginForm = this.formBuilder.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required]]
+    });
+  }
+
+  login() {
+    if (this.loginForm.valid) {
+      this.apiService.login(this.loginForm.value).subscribe({
+        next: (resp: any) => {
+          localStorage.setItem('token', resp.token);
+          this.router.navigate(['/profile']); // adjust the route as needed
+        },
+        error: () => {
+          this.errorMessage = 'Login was not successful. Please try again.';
+        }
+      });
+    }
   }
 }
