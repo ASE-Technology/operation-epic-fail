@@ -1,0 +1,26 @@
+<div class="container">
+    <div class="row">
+        <div class="mb-2">
+            <button class="btn btn-primary" (click)="onAddModalOpen()">Add New</button>
+        </div>
+    </div>
+
+    <div class="row">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">File</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let file of files; index as i;">
+                    <th scope="row">{{i + 1}}</th>
+                    <td>{{file.Name}}</td>
+                    <td><button class="btn btn-link" (click)="onDownload(file)">Download</button> </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

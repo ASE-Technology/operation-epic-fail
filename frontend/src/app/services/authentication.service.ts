@@ -10,14 +10,22 @@ const httpOptions = {
 @Injectable({
   providedIn: 'root'
 })
-export class ApiService {
+export class AuthenticationService {
   constructor(private http: HttpClient) { }
 
-  login(credentials: any, headers: any): Observable<any> {
-    return this.http.post(`${environment.authenticationServiceUrl}/login`, credentials, { headers });
+  login(credentials: any): Observable<any> {
+    return this.http.post(`${environment.authenticationServiceUrl}/login`, credentials, httpOptions);
   }
 
   register(data: any): Observable<any> {
     return this.http.post(`${environment.authenticationServiceUrl}/register`, data, httpOptions);
+  }
+
+  getProfile(): Observable<any> {
+    return this.http.get(`${environment.authenticationServiceUrl}/profile`, httpOptions);
+  }
+
+  updateProfile(data: any): Observable<any> {
+    return this.http.put(`${environment.authenticationServiceUrl}/profile`, data, httpOptions);
   }
 }

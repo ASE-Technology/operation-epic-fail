@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ProfileService } from '../services/profile.service';
 import { PasswordMismatchValidator } from '../shared/validators/password-mismatch.validator';
 import { ValidatorErrors } from '../shared/constants/validator-errors..constant';
+import { AuthenticationService } from '../services/authentication.service';
 
 @Component({
   selector: 'app-profile',
@@ -20,12 +20,12 @@ export class ProfileComponent implements OnInit {
   isSubmitted = false;
 
   constructor(
-    private profileService: ProfileService,
+    private authenticationService: AuthenticationService,
     private formBuilder: FormBuilder) {
   }
 
   ngOnInit(): void {
-    this.profileService.getProfile().subscribe(profile => {
+    this.authenticationService.getProfile().subscribe(profile => {
       this.bouildProfileForm(profile);
     })
   }
@@ -41,7 +41,7 @@ export class ProfileComponent implements OnInit {
       oldPassword: currentPassword
     };
 
-    this.profileService.updateProfile(data).subscribe();
+    this.authenticationService.updateProfile(data).subscribe();
   }
 
   private bouildProfileForm(profile: any) {

@@ -7,8 +7,11 @@ const cors = require("cors");
 
 app.use(express.json());
 app.use(cors({
-  origin: 'http://localhost'
-})); 
+  origin: [
+    'http://localhost:3001',
+    'http://localhost:5000',
+    'http://localhost:4200'
+  ]}));
 
 app.use('/authentication', authRoute);
 

@@ -17,7 +17,7 @@ async function register(req, res, next) {
         }
 
         await repository.register(user);
-        res.send(200);
+        res.status(200).send();
     } catch (err) {
         console.error(`Error while register`, err.message);
         next(err);

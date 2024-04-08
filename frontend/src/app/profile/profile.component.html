@@ -1,60 +1,61 @@
-<form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
-    <div class="mb-3">
-        <label for="email" class="form-label">Email address</label>
-        <input type="email" formControlName="email" class="form-control" id="email" aria-describedby="emailHelp">
-        <div *ngIf="isSubmitted && profileForm.get('email')?.invalid">
-            <ng-container [ngTemplateOutlet]="errorTemplate"
-                [ngTemplateOutletContext]="{ errors: profileForm.get('email')?.errors, fieldName: 'Email' }">
-            </ng-container>
-        </div>
-    </div>
-    <div class="mb-3">
-        <label for="currentPassword" class="form-label">Current password</label>
-        <input id="currentPassword" type="text" class="form-control" formControlName="currentPassword">
-        <div *ngIf="isSubmitted && profileForm.get('currentPassword')?.invalid">
-            <ng-container [ngTemplateOutlet]="errorTemplate"
-                [ngTemplateOutletContext]="{ errors: profileForm.get('currentPassword')?.errors, fieldName: 'Current password' }">
-            </ng-container>
-        </div>
-    </div>
-
-    <div class="mb-3">
-        <label for="newPassword" class="form-label">New password</label>
-        <input id="newPassword" type="text" class="form-control" formControlName="newPassword">
-        <div *ngIf="isSubmitted && profileForm.get('newPassword')?.invalid">
-            <ng-container [ngTemplateOutlet]="errorTemplate"
-                [ngTemplateOutletContext]="{ errors: profileForm.get('newPassword')?.errors, fieldName: 'New password' }">
-            </ng-container>
-        </div>
-    </div>
-
-    <div class="mb-3">
-        <label for="newPasswordAgain" class="form-label">New password (again)</label>
-        <input id="newPasswordAgain" type="text" class="form-control" formControlName="newPasswordAgain">
-        <div *ngIf="isSubmitted && profileForm.get('usernewPasswordAgainname')?.invalid">
-            <ng-container [ngTemplateOutlet]="errorTemplate"
-                [ngTemplateOutletContext]="{ errors: profileForm.get('newPasswordAgain')?.errors, fieldName: 'New password again' }">
-            </ng-container>
-        </div>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Update Profile</button>
-</form>
-
-<ng-template #errorTemplate
-             let-errors="errors"
-             let-fieldName="fieldName">
-    <ng-container *ngFor="let error of errors | keyvalue">
-        <ng-container *ngIf="!!fieldName">
-            <div class="text-red"
-                 *ngIf="error.key === validatorErrors.required">
-                {{ fieldName + ' ' + 'required' }}
+<div class="container">
+<div class="row row-cols-3">
+    <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+        <div class="mb-3">
+            <label for="email" class="form-label">Email address</label>
+            <input type="email" formControlName="email" class="form-control" id="email" aria-describedby="emailHelp">
+            <div *ngIf="isSubmitted && profileForm.get('email')?.invalid">
+                <ng-container [ngTemplateOutlet]="errorTemplate"
+                    [ngTemplateOutletContext]="{ errors: profileForm.get('email')?.errors, fieldName: 'Email' }">
+                </ng-container>
             </div>
-        </ng-container>
-        <ng-container *ngIf="!fieldName">
-            <div class="text-red">
-                {{ error.value }}
+        </div>
+        <div class="mb-3">
+            <label for="currentPassword" class="form-label">Current password</label>
+            <input id="currentPassword" type="text" class="form-control" formControlName="currentPassword">
+            <div *ngIf="isSubmitted && profileForm.get('currentPassword')?.invalid">
+                <ng-container [ngTemplateOutlet]="errorTemplate"
+                    [ngTemplateOutletContext]="{ errors: profileForm.get('currentPassword')?.errors, fieldName: 'Current password' }">
+                </ng-container>
             </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="newPassword" class="form-label">New password</label>
+            <input id="newPassword" type="text" class="form-control" formControlName="newPassword">
+            <div *ngIf="isSubmitted && profileForm.get('newPassword')?.invalid">
+                <ng-container [ngTemplateOutlet]="errorTemplate"
+                    [ngTemplateOutletContext]="{ errors: profileForm.get('newPassword')?.errors, fieldName: 'New password' }">
+                </ng-container>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="newPasswordAgain" class="form-label">New password (again)</label>
+            <input id="newPasswordAgain" type="text" class="form-control" formControlName="newPasswordAgain">
+            <div *ngIf="isSubmitted && profileForm.get('usernewPasswordAgainname')?.invalid">
+                <ng-container [ngTemplateOutlet]="errorTemplate"
+                    [ngTemplateOutletContext]="{ errors: profileForm.get('newPasswordAgain')?.errors, fieldName: 'New password again' }">
+                </ng-container>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Update Profile</button>
+    </form>
+
+    <ng-template #errorTemplate let-errors="errors" let-fieldName="fieldName">
+        <ng-container *ngFor="let error of errors | keyvalue">
+            <ng-container *ngIf="!!fieldName">
+                <div class="text-red" *ngIf="error.key === validatorErrors.required">
+                    {{ fieldName + ' ' + 'required' }}
+                </div>
+            </ng-container>
+            <ng-container *ngIf="!fieldName">
+                <div class="text-red">
+                    {{ error.value }}
+                </div>
+            </ng-container>
         </ng-container>
-    </ng-container>
-</ng-template>
+    </ng-template>
+</div>
+</div>

@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ApiService } from '../services/api.service';
 import { CommonModule } from '@angular/common';
-import { HttpHeaders } from '@angular/common/http';
+import { AuthenticationService } from '../services/authentication.service';
 
 @Component({
   selector: 'app-login-page',
@@ -18,7 +17,7 @@ export class LoginPageComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private apiService: ApiService, 
+    private authenticationService: AuthenticationService, 
     private router: Router) {
   }
 
@@ -31,10 +30,9 @@ export class LoginPageComponent implements OnInit {
 
   login() {
     if (this.loginForm.valid) {
-      const headers = new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('token')}`);
-      this.apiService.login(this.loginForm.value, headers).subscribe({
-      next: (resp: any) => {
-        localStorage.setItem('token', resp.token);
+      this.authenticationService.login(this.loginForm.value).subscribe({
+      next: (res: any) => {
+        localStorage.setItem('token', res.accessToken);
         this.router.navigate(['/profile']);
       },
       error: () => {
