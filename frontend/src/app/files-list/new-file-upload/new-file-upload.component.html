@@ -1,0 +1,11 @@
+<div class="modal-header">
+    <h4 class="modal-title">New file upload</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.dismiss('Cross click')"></button>
+</div>
+<div class="modal-body">
+    <div class="input-group mt-2 mb-2">
+        <input type="file" accept="image/png, image/jpeg" class="form-control" id="newFile" aria-describedby="newFile"
+            aria-label="Upload" (change)="onFileChanged($event)">
+        <button class="btn btn-outline-secondary" [disabled]="!selectedFile" type="button" id="newFile" (click)="onUpload()">Upload</button>
+    </div>
+</div>
