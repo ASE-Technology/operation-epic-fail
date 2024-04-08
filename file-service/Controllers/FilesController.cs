@@ -1,6 +1,7 @@
 using file_service.Models.Interfaces.Services;
 using file_service.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections;
 
 namespace file_service.Controllers;
 
@@ -23,19 +24,17 @@ public class FilesController : ControllerBase
     }
 
     [HttpGet(Name = "GetFiles")]
-    public IEnumerable<File> Get()
+    public async Task<IEnumerable<File>> Get()
     {
-        // Used to validate functionality. To be removed.
         var id = _authService.UserId;
-        return Enumerable.Range(1, 5).Select(index => new File
-        {
-            Filename = $"{DateTime.Now.Ticks}.txt"
-        })
-        .ToArray();
+
+        var files = await _fileService.GetFilesAsync(id);
+
+        return files;        
     }
 
     [HttpPost(Name = "Import")]
-    public async Task<IActionResult> UploadFile(IFormFile file)
+    public async Task<IActionResult> ImportFile(IFormFile file)
     {
         if (file == null || file.Length == 0)
         {
@@ -49,5 +48,18 @@ public class FilesController : ControllerBase
         }
 
         return Ok();
+    }
+
+    [HttpGet("{id}",Name = "Export")]
+    public async Task<IActionResult> ExportFile([FromRoute] Guid id)
+    {
+        var fileResult = await _fileService.GetFileAsync(id);
+
+        if (fileResult == null)
+        {
+            return NotFound();
+        }
+
+        return fileResult;
     }
 }

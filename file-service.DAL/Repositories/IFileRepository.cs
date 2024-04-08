@@ -6,6 +6,7 @@ namespace file_service.DAL.Repositories
     {
         Task AddAsync(File document);
 
-        Task<File> GetByIdAsync(Guid id);
+        Task<File> GetFileByIdAsync(Guid fileId);
+        Task<List<File>> GetFilesByUserIdAsync(string userId);
     }
 }

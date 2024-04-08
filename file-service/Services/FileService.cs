@@ -1,6 +1,7 @@
 ﻿using file_service.DAL;
 using file_service.Models.Users;
 using file_service.Settings;
+using Microsoft.AspNetCore.Mvc;
 
 namespace file_service.Services
 {
@@ -13,6 +14,12 @@ namespace file_service.Services
         {
             _settings = fileServiceSettings ?? throw new ArgumentNullException(nameof(fileServiceSettings));
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+        }
+
+        public async Task<List<File>> GetFilesAsync(string userId)
+        {
+            var files = await _unitOfWork.FileRepository.GetFilesByUserIdAsync(userId);
+            return files;
         }
 
         public async Task ProcessFileAsync(string fileName, Stream fileStream, string userId)
@@ -32,6 +39,31 @@ namespace file_service.Services
             {
                 throw new Exception($"Error processing file: {ex.Message}");
             }
+        }
+        public async Task<FileResult> GetFileAsync(Guid fileId)
+        {
+            File file = await _unitOfWork.FileRepository.GetFileByIdAsync(fileId);
+            if (file == null)
+            {
+                throw new Exception("File not found");
+            }
+
+            var filePath = Path.Combine(_settings.LocalStoragePath, file.Filename);
+
+            if (!System.IO.File.Exists(filePath))
+            {
+                throw new Exception("File not found");
+            }
+
+            string contentType = "application/octet-stream"; // Default content type
+
+            // Return the file as a FileStreamResult
+            FileStream fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+            return new FileStreamResult(fileStream, contentType)
+            {
+                FileDownloadName = file.Filename
+            };
+
         }
 
         private async Task SaveMetadataToDatabaseAsync(string fileName, long fileSize, string userId)
@@ -76,5 +108,7 @@ namespace file_service.Services
                 await fileStream.CopyToAsync(fileStreamLocal);
             }
         }
+
+       
     }
 }

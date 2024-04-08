@@ -18,15 +18,22 @@ namespace file_service.DAL.Repositories
 
         public async Task AddAsync(File document)
         {
-            //var documentEntity = _mapper.Map<Entities.Document>(document);
             await _context.Files.AddAsync(document);
         }
 
-        public async Task<File> GetByIdAsync(Guid id)
+        public async Task<File> GetFileByIdAsync(Guid id)
         {
-            var documentEntity = await _context.Files.FirstOrDefaultAsync(x => x.Id == id);
-            //return _mapper.Map<Document>(documentEntity);
-            return documentEntity;
+            var dbFIle = await _context.Files.FirstOrDefaultAsync(x => x.Id == id);
+            return dbFIle;
+        }
+
+        public async Task<List<File>> GetFilesByUserIdAsync(string userId)
+        {
+            var files = await _context.Files
+                .Where(x => x.UserId == userId)
+                .ToListAsync();
+
+            return files;
         }
     }
 }
