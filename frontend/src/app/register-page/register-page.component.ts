@@ -12,7 +12,7 @@ import { ApiService } from '../services/api.service';
   styleUrls: ['./register-page.component.css']
 })
 export class RegisterPageComponent implements OnInit {
-  registerForm!: FormGroup; // Use non-null assertion operator
+  registerForm!: FormGroup; 
   registrationSuccess!: boolean;
   errorMessage = '';
 
@@ -38,12 +38,9 @@ export class RegisterPageComponent implements OnInit {
         error: (error: any) => {
           this.registrationSuccess = false;
           if (error.status === 400) {
-            this.errorMessage = 'Email already exists. Please try again with a different email.';
-          } else if (error.status === 200) {
-            this.registrationSuccess = true;
-            this.errorMessage = '';
+            this.errorMessage = error.message;
           } else {
-            this.errorMessage = 'Error during registration. Please try again.';
+            this.errorMessage = error.message;
           }
         }
       });

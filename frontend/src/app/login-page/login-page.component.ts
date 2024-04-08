@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router } from '@angular/router';
 import { ApiService } from '../services/api.service';
 import { CommonModule } from '@angular/common';
+import { HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-login-page',
@@ -30,15 +31,16 @@ export class LoginPageComponent implements OnInit {
 
   login() {
     if (this.loginForm.valid) {
-      this.apiService.login(this.loginForm.value).subscribe({
-        next: (resp: any) => {
-          localStorage.setItem('token', resp.token);
-          this.router.navigate(['/profile']); // adjust the route as needed
-        },
-        error: () => {
-          this.errorMessage = 'Login was not successful. Please try again.';
-        }
-      });
-    }
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('token')}`);
+      this.apiService.login(this.loginForm.value, headers).subscribe({
+      next: (resp: any) => {
+        localStorage.setItem('token', resp.token);
+        this.router.navigate(['/profile']);
+      },
+      error: () => {
+        this.errorMessage = 'Login was not successful. Please try again.';
+      }
+    });
   }
+}
 }

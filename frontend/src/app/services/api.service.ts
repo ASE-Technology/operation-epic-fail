@@ -13,11 +13,11 @@ const httpOptions = {
 export class ApiService {
   constructor(private http: HttpClient) { }
 
-  register(data: any): Observable<any> {
-    return this.http.post(`${environment.authenticationServiceUrl}/register`, data, httpOptions);
+  login(credentials: any, headers: any): Observable<any> {
+    return this.http.post(`${environment.authenticationServiceUrl}/login`, credentials, { headers });
   }
 
-  login(data: any): Observable<any> {
-    return this.http.post(`${environment.authenticationServiceUrl}/login`, data, httpOptions);
+  register(data: any): Observable<any> {
+    return this.http.post(`${environment.authenticationServiceUrl}/register`, data, httpOptions);
   }
 }
