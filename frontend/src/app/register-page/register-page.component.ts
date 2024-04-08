@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { ApiService } from '../services/api.service';
+import { AuthenticationService } from '../services/authentication.service';
 
 @Component({
   selector: 'app-register-page',
@@ -18,7 +18,7 @@ export class RegisterPageComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private apiService: ApiService, 
+    private authenticationService: AuthenticationService, 
     private router: Router) {}
 
   ngOnInit(): void {
@@ -30,7 +30,7 @@ export class RegisterPageComponent implements OnInit {
 
   register() {
     if (this.registerForm.valid) {
-      this.apiService.register(this.registerForm.value).subscribe({
+      this.authenticationService.register(this.registerForm.value).subscribe({
         next: () => {
           this.registrationSuccess = true;
           this.errorMessage = '';
