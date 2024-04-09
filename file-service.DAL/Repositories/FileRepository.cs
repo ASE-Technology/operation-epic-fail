@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Reflection.Metadata;
 
 namespace file_service.DAL.Repositories
 {
@@ -23,8 +22,7 @@ namespace file_service.DAL.Repositories
 
         public async Task<File> GetFileByIdAsync(Guid id)
         {
-            var dbFIle = await _context.Files.FirstOrDefaultAsync(x => x.Id == id);
-            return dbFIle;
+            return await _context.Files.FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<List<File>> GetFilesByUserIdAsync(string userId)

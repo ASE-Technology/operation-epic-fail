@@ -1,6 +1,5 @@
 ﻿using file_service.DAL.Repositories;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
 namespace file_service.DAL
 {
@@ -16,7 +15,7 @@ namespace file_service.DAL
 
         #region Constructor
 
-        public UnitOfWork(DBContext context, ILogger<UnitOfWork> logger)
+        public UnitOfWork(DBContext context)
         {
             _context = context;
         }
@@ -24,6 +23,7 @@ namespace file_service.DAL
         #endregion
 
         #region Repositories
+
         public IFileRepository FileRepository => _fileRepository ??= new FileRepository(_context);
 
         #endregion

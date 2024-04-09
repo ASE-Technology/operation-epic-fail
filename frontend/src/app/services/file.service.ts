@@ -19,12 +19,15 @@ export class FileService {
 
   addFile(file: any): Observable<any> {
     let formData: FormData = new FormData();
-    formData.append('file', file);
+    formData.append('file', file, file.name);
     
-    return this.http.post(`${environment.fileServiceUrl}`, formData, httpOptions);
+    return this.http.post(`${environment.fileServiceUrl}`, formData);
   }
 
   downloadFile(id: string): Observable<any> {
-    return this.http.get(`${environment.fileServiceUrl}/${id}`, httpOptions);
+    return this.http.get(`${environment.fileServiceUrl}/${id}`, {
+      reportProgress: true,
+      responseType: 'blob',
+  });
   }
 }
