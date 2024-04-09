@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthenticationService } from '../services/authentication.service';
+import { PasswordMismatchValidator } from '../shared/validators/password-mismatch.validator';
 
 @Component({
   selector: 'app-register-page',
@@ -24,7 +25,10 @@ export class RegisterPageComponent implements OnInit {
   ngOnInit(): void {
     this.registerForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required]]
+      password: ['', [Validators.required]],
+      passwordAgain: ['', [Validators.required]],
+    }, {
+      validators: PasswordMismatchValidator('password', 'passwordAgain')
     });
   }
 

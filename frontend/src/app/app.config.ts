@@ -4,10 +4,14 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { authenticationInterceptor } from './services/authentication.interceptor';
+import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideToastr } from 'ngx-toastr';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes), 
-    provideHttpClient(withInterceptors([authenticationInterceptor]))
+    provideHttpClient(withInterceptors([authenticationInterceptor])),
+    provideAnimations(),
+    provideToastr()
   ]
 };

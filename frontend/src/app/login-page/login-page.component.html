@@ -4,7 +4,8 @@
       <div class="card">
         <div class="card-body">
           <form [formGroup]="loginForm" (ngSubmit)="login()">
-            <div class="form-group">
+            <h1>Login</h1>
+            <div class="form-group mb-3 mt-3">
               <label for="email">Email</label>
               <input type="email" class="form-control" id="email" formControlName="email" placeholder="Enter email">
               <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" class="text-danger">
@@ -12,14 +13,14 @@
                 <small *ngIf="loginForm.get('email')?.errors?.['email']">Invalid email format.</small>
               </div>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-3">
               <label for="password">Password</label>
               <input type="password" class="form-control" id="password" formControlName="password" placeholder="Enter password">
               <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="text-danger">
                 <small>Password is required.</small>
               </div>
             </div>
-            <button type="submit" class="btn btn-primary">Login</button>
+            <button type="submit" class="btn btn-primary" [disabled]="!loginForm.valid">Login</button>
           </form>
           <p class="text-danger mt-2" *ngIf="errorMessage">{{ errorMessage }}</p>
         </div>

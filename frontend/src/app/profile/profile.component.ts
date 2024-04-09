@@ -41,7 +41,14 @@ export class ProfileComponent implements OnInit {
       oldPassword: currentPassword
     };
 
-    this.authenticationService.updateProfile(data).subscribe();
+    this.authenticationService.updateProfile(data).subscribe(_ => {
+      // Login again in order to update the token
+      this.authenticationService.login({email: email, password: newPassword}).subscribe({
+        next: (res: any) => {
+          localStorage.setItem('token', res.accessToken);
+        }
+      });
+    });
   }
 
   private bouildProfileForm(profile: any) {

@@ -77,7 +77,7 @@ namespace file_service.Services
                 // Simulates a long running file process
                 Task.Run(async () =>
                 {
-                    await Task.Delay(5000);
+                    await Task.Delay(2000);
                     await _signalRService.BroadcastMethodData(_authService.UserId, SignalRMehtods.FILE_PROCESSED, "File processed successfully!");
                 });
             }

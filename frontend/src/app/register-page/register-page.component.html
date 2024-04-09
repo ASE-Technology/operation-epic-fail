@@ -4,7 +4,8 @@
       <div class="card">
         <div class="card-body">
           <form [formGroup]="registerForm" (ngSubmit)="register()" *ngIf="!registrationSuccess">
-            <div class="form-group">
+            <h1>Registration</h1>
+            <div class="form-group mb-3 mt-3">
               <label for="email">Email</label>
               <input type="email" class="form-control" id="email" formControlName="email" placeholder="Email">
               <div *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched" class="text-danger">
@@ -12,11 +13,18 @@
                 <small *ngIf="registerForm.get('email')?.errors?.['email']">Invalid email format.</small>
               </div>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-3">
               <label for="password">Password</label>
               <input type="password" class="form-control" id="password" formControlName="password" placeholder="Password">
               <div *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched" class="text-danger">
                 <small>Password is required.</small>
+              </div>
+            </div>
+            <div class="form-group mb-3">
+              <label for="passwordAgain">Password (again)</label>
+              <input type="password" class="form-control" id="passwordAgain" formControlName="passwordAgain" placeholder="Password (again)">
+              <div *ngIf="registerForm.get('passwordAgain')?.invalid && registerForm.get('passwordAgain')?.touched" class="text-danger">
+                <small>Password (again) is required.</small>
               </div>
             </div>
             <button type="submit" class="btn btn-primary" [disabled]="!registerForm.valid">Register</button>
