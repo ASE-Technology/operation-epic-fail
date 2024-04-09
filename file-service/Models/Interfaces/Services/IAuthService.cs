@@ -7,6 +7,7 @@ namespace file_service.Models.Interfaces.Services
         string UserId { get; }
         string Email { get; }
         string Role { get; }
+        bool IsAuthenticated { get; }
 
         void SetCurrentUser(User currentUser);
     }
