@@ -3,6 +3,7 @@ import { FileService } from '../services/file.service';
 import { CommonModule } from '@angular/common';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NewFileUploadComponent } from './new-file-upload/new-file-upload.component';
+import { SignalrService } from '../services/signalr.service';
 
 @Component({
   selector: 'app-files-list',
@@ -17,13 +18,15 @@ export class FilesListComponent implements OnInit {
 
   constructor(
     private fileService: FileService,
+    private signalrService: SignalrService,
     private modal: NgbModal) {
 
   }
 
   ngOnInit(): void {
+    this.signalrService.fileProcesses$.subscribe(message => alert(message));
     this.fileService.getFiles().subscribe(files => {
-      //this.files = files;
+      this.files = files;
     });
   }
 

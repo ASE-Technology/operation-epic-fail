@@ -10,6 +10,7 @@ namespace file_service.Services
         public string UserId => _currentUser.Id;
         public string Email => _currentUser.Email;
         public string Role => _currentUser.Role;
+        public bool IsAuthenticated => _currentUser != null;
 
         public void SetCurrentUser(User currentUser)
         {
