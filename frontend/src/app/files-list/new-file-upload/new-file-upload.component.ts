@@ -27,7 +27,9 @@ export class NewFileUploadComponent {
 
   onUpload() {
     if (this.selectedFile) {
-      this.fileService.addFile(this.selectedFile).subscribe();
+      this.fileService.addFile(this.selectedFile).subscribe(_ => {
+        this.activeModal.close(true);
+      });
     }
   }
 }

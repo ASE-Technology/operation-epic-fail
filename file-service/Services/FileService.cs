@@ -1,28 +1,67 @@
 ﻿using file_service.DAL;
-using file_service.Models.Users;
+using file_service.Models.Constants;
+using file_service.Models.Interfaces.Services;
 using file_service.Settings;
-using Microsoft.AspNetCore.Mvc;
 
 namespace file_service.Services
 {
-    public class FileService
+    public class FileService: IFileService
     {
         private readonly FileSettings _settings;
+        private readonly IAuthService _authService;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly ISignalRService _signalRService;
 
-        public FileService(FileSettings fileServiceSettings, IUnitOfWork unitOfWork)
+        public FileService(
+            FileSettings fileServiceSettings,
+            IAuthService authService,
+            IUnitOfWork unitOfWork,
+            ISignalRService signalRService)
         {
             _settings = fileServiceSettings ?? throw new ArgumentNullException(nameof(fileServiceSettings));
+            _authService = authService ?? throw new ArgumentNullException(nameof(authService));
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            _signalRService = signalRService ?? throw new ArgumentNullException(nameof(signalRService));
         }
 
-        public async Task<List<File>> GetFilesAsync(string userId)
+        public async Task<IEnumerable<File>> GetUserFilesAsync()
         {
-            var files = await _unitOfWork.FileRepository.GetFilesByUserIdAsync(userId);
-            return files;
+            return await _unitOfWork.FileRepository.GetFilesByUserIdAsync(_authService.UserId);
         }
 
-        public async Task ProcessFileAsync(string fileName, Stream fileStream, string userId)
+        public async Task<File> GetFileByIdAsync(Guid fileId)
+        {
+            return await _unitOfWork.FileRepository.GetFileByIdAsync(fileId);
+        }
+
+        public async Task ImportFileAsync(IFormFile file)
+        {
+            using (var stream = file.OpenReadStream())
+            {
+                await ProcessFileAsync(file.FileName, stream, _authService.UserId);
+            }
+        }
+
+        public async Task<MemoryStream> GetFileStreamAsync(File file)
+        {
+            var filePath = Path.Combine(_settings.LocalStoragePath, file.Filename);
+
+            if (!System.IO.File.Exists(filePath))
+            {
+                throw new Exception("File not found");
+            }
+
+            var memoryStream = new MemoryStream();
+            await using (var stream = new FileStream(filePath, FileMode.Open))
+            {
+                await stream.CopyToAsync(memoryStream);
+            }
+            memoryStream.Position = 0;
+
+            return memoryStream;
+        }
+
+        private async Task ProcessFileAsync(string fileName, Stream fileStream, string userId)
         {
             try
             {
@@ -34,38 +73,20 @@ namespace file_service.Services
 
                 // Saving a copy of the file to the local system
                 await SaveToLocalFileSystemAsync(fileName, fileStream);
+
+                // Simulates a long running file process
+                Task.Run(async () =>
+                {
+                    await Task.Delay(5000);
+                    await _signalRService.BroadcastMethodData(_authService.UserId, SignalRMehtods.FILE_PROCESSED, "File processed successfully!");
+                });
             }
             catch (Exception ex)
             {
                 throw new Exception($"Error processing file: {ex.Message}");
             }
         }
-        public async Task<FileResult> GetFileAsync(Guid fileId)
-        {
-            File file = await _unitOfWork.FileRepository.GetFileByIdAsync(fileId);
-            if (file == null)
-            {
-                throw new Exception("File not found");
-            }
-
-            var filePath = Path.Combine(_settings.LocalStoragePath, file.Filename);
-
-            if (!System.IO.File.Exists(filePath))
-            {
-                throw new Exception("File not found");
-            }
-
-            string contentType = "application/octet-stream"; // Default content type
-
-            // Return the file as a FileStreamResult
-            FileStream fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
-            return new FileStreamResult(fileStream, contentType)
-            {
-                FileDownloadName = file.Filename
-            };
-
-        }
-
+        
         private async Task SaveMetadataToDatabaseAsync(string fileName, long fileSize, string userId)
         {
             await _unitOfWork.FileRepository.AddAsync(new File
@@ -107,8 +128,6 @@ namespace file_service.Services
             {
                 await fileStream.CopyToAsync(fileStreamLocal);
             }
-        }
-
-       
+        }       
     }
 }

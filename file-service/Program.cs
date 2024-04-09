@@ -27,6 +27,7 @@ builder.Services.AddHttpClient();
 
 // Add services to the container.
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddScoped<ISignalRService, SignalRService>();
 
 builder.Services.AddControllers();
@@ -63,12 +64,8 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
-
-
 // SignalR communication
 app.MapHub<SignalRCommunication>("/communication");
-
-
 
 app.MapControllers();
 

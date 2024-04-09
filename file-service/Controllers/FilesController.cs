@@ -1,9 +1,6 @@
-using file_service.Models.Constants;
 using file_service.Models.Interfaces.Services;
-using file_service.Models.Users;
-using file_service.Services;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections;
+using System.ComponentModel.DataAnnotations;
 
 namespace file_service.Controllers;
 
@@ -11,57 +8,38 @@ namespace file_service.Controllers;
 [Route("[controller]")]
 public class FilesController : ControllerBase
 {
-    private readonly ILogger<FilesController> _logger;
-    private readonly IAuthService _authService;
-    private readonly FileService _fileService;
+    private readonly IFileService _fileService;
 
-    public FilesController(
-        ILogger<FilesController> logger, 
-        IAuthService authService,
-        FileService fileService)
+    public FilesController(IFileService fileService)
     {
-        _logger = logger;
         _fileService = fileService;
-        _authService = authService;
     }
 
-    [HttpGet(Name = "GetFiles")]
-    public async Task<IEnumerable<File>> Get()
+    [HttpGet(Name = nameof(GetUserFiles))]
+    public async Task<IEnumerable<File>> GetUserFiles()
     {
-        var id = _authService.UserId;
-
-        var files = await _fileService.GetFilesAsync(id);
-
-        return files;        
+        return await _fileService.GetUserFilesAsync();     
     }
 
-    [HttpPost(Name = "Import")]
-    public async Task<IActionResult> ImportFile(IFormFile file)
+    [HttpPost(Name = nameof(ImportFile))]
+    public async Task<IActionResult> ImportFile([Required] IFormFile file)
     {
-        if (file == null || file.Length == 0)
-        {
-            return BadRequest("Empty file");
-        }
-
-        var id = _authService.UserId;
-        using (var stream = file.OpenReadStream())
-        {
-            await _fileService.ProcessFileAsync(file.FileName, stream, id);
-        }
+        await _fileService.ImportFileAsync(file);
 
         return Ok();
     }
 
-    [HttpGet("{id}",Name = "Export")]
-    public async Task<IActionResult> ExportFile([FromRoute] Guid id)
+    [HttpGet("{id}", Name = nameof(GetFileStream))]
+    public async Task<IActionResult> GetFileStream([FromRoute] Guid id)
     {
-        var fileResult = await _fileService.GetFileAsync(id);
-
-        if (fileResult == null)
+        var file = await _fileService.GetFileByIdAsync(id);
+        if (file == null)
         {
             return NotFound();
         }
 
-        return fileResult;
+        var fileStream = await _fileService.GetFileStreamAsync(file);
+
+        return File(fileStream, "application/octet-stream");
     }
 }

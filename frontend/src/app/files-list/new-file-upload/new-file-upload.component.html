@@ -4,7 +4,7 @@
 </div>
 <div class="modal-body">
     <div class="input-group mt-2 mb-2">
-        <input type="file" accept="image/png, image/jpeg" class="form-control" id="newFile" aria-describedby="newFile"
+        <input type="file" class="form-control" id="newFile" aria-describedby="newFile"
             aria-label="Upload" (change)="onFileChanged($event)">
         <button class="btn btn-outline-secondary" [disabled]="!selectedFile" type="button" id="newFile" (click)="onUpload()">Upload</button>
     </div>
