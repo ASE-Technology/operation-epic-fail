@@ -1,4 +1,4 @@
-import { Component, Inject, Injector, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FileService } from '../services/file.service';
 import { CommonModule } from '@angular/common';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -23,11 +23,14 @@ export class FilesListComponent implements OnInit {
   constructor(
     private fileService: FileService,
     private signalrService: SignalrService,
+    private toastrService: ToastrService,
     private modal: NgbModal) {
   }
 
   ngOnInit(): void {
-    this.signalrService.fileProcesses$.subscribe((message: string) => alert(message));
+    this.signalrService.fileProcesses$.subscribe((message: string) =>
+      this.toastrService.success(message, "File process")
+    );
 
     this.files$ = this.refreshFiles$.pipe(switchMap(_ => this.fileService.getFiles().pipe(tap(files => this.files = files))));
   }
@@ -35,7 +38,7 @@ export class FilesListComponent implements OnInit {
   onAddModalOpen() {
     this.modal.open(NewFileUploadComponent).closed.subscribe(uploaded => {
       if (uploaded) {
-        //alert("File uploaded");
+        this.toastrService.success("File uploaded successfully!", "File upload");
         this.refreshFiles$.next(true);
       }
     });
@@ -46,7 +49,7 @@ export class FilesListComponent implements OnInit {
       var downloadURL = window.URL.createObjectURL(data);
       var link = document.createElement('a');
       link.href = downloadURL;
-      link.download = "help.pdf";
+      link.download = file.filename;
       link.click();
     });
   }
