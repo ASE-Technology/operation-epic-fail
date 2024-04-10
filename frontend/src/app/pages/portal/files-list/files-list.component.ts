@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FileService } from '../services/file.service';
+import { FileService } from '../../../services/file.service';
 import { CommonModule } from '@angular/common';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NewFileUploadComponent } from './new-file-upload/new-file-upload.component';
-import { SignalrService } from '../services/signalr.service';
+import { SignalrService } from '../../../services/signalr.service';
 import { ToastrService } from 'ngx-toastr';
 import { BehaviorSubject, Observable, switchMap, tap } from 'rxjs';
 

@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { AuthenticationService } from '../services/authentication.service';
-import { PasswordMismatchValidator } from '../shared/validators/password-mismatch.validator';
+import { AuthenticationService } from '../../../services/authentication.service';
+import { PasswordMismatchValidator } from '../../../shared/validators/password-mismatch.validator';
 
 @Component({
   selector: 'app-register-page',
@@ -34,15 +34,21 @@ export class RegisterPageComponent implements OnInit {
 
   register() {
     if (this.registerForm.valid) {
-      this.authenticationService.register(this.registerForm.value).subscribe({
+      const { email, password } = this.registerForm.getRawValue();
+      const data = {
+        email: email,
+        password: password
+      };
+
+      this.authenticationService.register(data).subscribe({
         next: () => {
           this.registrationSuccess = true;
           this.errorMessage = '';
         },
         error: (error: any) => {
           this.registrationSuccess = false;
-          if (error.status === 400) {
-            this.errorMessage = error.message;
+          if (error.error) {
+            this.errorMessage = error.error.message;
           } else {
             this.errorMessage = error.message;
           }

@@ -1,11 +1,13 @@
-<div class="container mt-5">
+<div class="container mt-5 text-center">
+  <img class="mt-5 mb-3" src="https://themes.getbootstrap.com/wp-content/themes/bootstrap-marketplace/assets/images/elements/bootstrap-stack.png"
+                srcset="https://themes.getbootstrap.com/wp-content/themes/bootstrap-marketplace/assets/images/elements/bootstrap-stack.png 1x, https://themes.getbootstrap.com/wp-content/themes/bootstrap-marketplace/assets/images/elements/bootstrap-stack@2x.png 2x">
   <div class="row">
-    <div class="col-md-6 offset-md-3">
+    <div class="col-md-4 offset-md-4">
       <div class="card">
         <div class="card-body">
           <form [formGroup]="loginForm" (ngSubmit)="login()">
             <h1>Login</h1>
-            <div class="form-group mb-3 mt-3">
+            <div class="form-group mb-3 mt-3 text-start">
               <label for="email">Email</label>
               <input type="email" class="form-control" id="email" formControlName="email" placeholder="Enter email">
               <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" class="text-danger">
@@ -13,14 +15,14 @@
                 <small *ngIf="loginForm.get('email')?.errors?.['email']">Invalid email format.</small>
               </div>
             </div>
-            <div class="form-group mb-3">
+            <div class="form-group mb-3 text-start">
               <label for="password">Password</label>
               <input type="password" class="form-control" id="password" formControlName="password" placeholder="Enter password">
               <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="text-danger">
                 <small>Password is required.</small>
               </div>
             </div>
-            <button type="submit" class="btn btn-primary" [disabled]="!loginForm.valid">Login</button>
+            <button type="submit" class="btn btn-outline-dark" [disabled]="!loginForm.valid">Login</button>
           </form>
           <p class="text-danger mt-2" *ngIf="errorMessage">{{ errorMessage }}</p>
         </div>

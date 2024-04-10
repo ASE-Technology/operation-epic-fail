@@ -13,7 +13,7 @@ async function register(req, res, next) {
 
         const existingUser = await repository.getUserByEmail(user.email);
         if (existingUser) {
-            return res.status(409).send("User with this email already exists");
+            return res.status(409).send({message: "User with this email already exists"});
         }
 
         await repository.register(user);
@@ -33,12 +33,12 @@ async function login(req, res, next) {
 
         const existingUser = await repository.getUserByEmail(user.email);
         if (!existingUser) {
-            return res.status(404).send("User not found");
+            return res.status(404).send({message: "User not found"});
         }
 
         const passwordIsValid = bcrypt.compareSync(user.password, existingUser.password);
         if (!passwordIsValid) {
-            return res.status(404).send("Wrong password");
+            return res.status(404).send({message: "Wrong password"});
         }
 
         const token = jwt.sign({
@@ -70,12 +70,12 @@ async function updateProfile(req, res, next) {
 
         const userToUpdate = await repository.getUserById(req.user.id);
         if (!userToUpdate) {
-            return res.status(404).send("User not found");
+            return res.status(404).send({message: "User not found"});
         }
 
         const passwordIsValid = bcrypt.compareSync(updateProfile.oldPassword, userToUpdate.password);
         if (!passwordIsValid) {
-            return res.status(404).send("Wrong old password");
+            return res.status(404).send({message: "Wrong old password"});
         }
 
         userToUpdate.email = updateProfile.email;
