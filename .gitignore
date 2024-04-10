@@ -2,3 +2,6 @@
 .DS_Store
 /file-service.DAL/bin/Debug/net7.0
 /file-service.DAL/obj
+/file-service.test/bin
+/file-service.test/obj
+/file-service.tests/obj

@@ -99,27 +99,6 @@ namespace file_service.Services
             await _unitOfWork.CommitAsync();
         }
 
-        //private async Task UploadFileToBlobStorageAsync(string fileName, Stream fileStream)
-        //{
-        //    CloudStorageAccount storageAccount;
-        //    if (CloudStorageAccount.TryParse(azureStorageConnectionString, out storageAccount))
-        //    {
-        //        var cloudBlobClient = storageAccount.CreateCloudBlobClient();
-        //        var cloudBlobContainer = cloudBlobClient.GetContainerReference("files");
-
-        //        if (await cloudBlobContainer.CreateIfNotExistsAsync())
-        //        {
-        //            await cloudBlobContainer.SetPermissionsAsync(new BlobContainerPermissions { PublicAccess = BlobContainerPublicAccessType.Blob });
-        //        }
-
-        //        var cloudBlockBlob = cloudBlobContainer.GetBlockBlobReference(fileName);
-        //        await cloudBlockBlob.UploadFromStreamAsync(fileStream);
-        //    }
-        //    else
-        //    {
-        //        throw new Exception("Invalid Azure Storage Account Connection String");
-        //    }
-        //}
 
         private async Task SaveToLocalFileSystemAsync(string fileName, Stream fileStream)
         {
@@ -129,5 +108,7 @@ namespace file_service.Services
                 await fileStream.CopyToAsync(fileStreamLocal);
             }
         }       
+
+
     }
 }
