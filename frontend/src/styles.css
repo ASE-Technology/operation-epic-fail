@@ -3,3 +3,8 @@
     color: #ffc107;
     font-weight: bold;
 }
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 1s;
+}
