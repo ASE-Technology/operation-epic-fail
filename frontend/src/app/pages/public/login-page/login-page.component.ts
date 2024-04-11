@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { AuthenticationService } from '../services/authentication.service';
+import { AuthenticationService } from '../../../services/authentication.service';
 
 @Component({
   selector: 'app-login-page',
@@ -33,7 +33,7 @@ export class LoginPageComponent implements OnInit {
       this.authenticationService.login(this.loginForm.value).subscribe({
       next: (res: any) => {
         localStorage.setItem('token', res.accessToken);
-        this.router.navigate(['/profile']);
+        this.router.navigate(['/portal/dashboard']);
       },
       error: () => {
         this.errorMessage = 'Login was not successful. Please try again.';

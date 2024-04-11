@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { PasswordMismatchValidator } from '../shared/validators/password-mismatch.validator';
-import { ValidatorErrors } from '../shared/constants/validator-errors..constant';
-import { AuthenticationService } from '../services/authentication.service';
+import { PasswordMismatchValidator } from '../../../shared/validators/password-mismatch.validator';
+import { ValidatorErrors } from '../../../shared/constants/validator-errors..constant';
+import { AuthenticationService } from '../../../services/authentication.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-profile',
@@ -18,10 +19,12 @@ export class ProfileComponent implements OnInit {
 
   profileForm!: FormGroup;
   isSubmitted = false;
+  errorMessage = '';
 
   constructor(
     private authenticationService: AuthenticationService,
-    private formBuilder: FormBuilder) {
+    private formBuilder: FormBuilder,
+    private toastrService: ToastrService,) {
   }
 
   ngOnInit(): void {
@@ -41,13 +44,19 @@ export class ProfileComponent implements OnInit {
       oldPassword: currentPassword
     };
 
-    this.authenticationService.updateProfile(data).subscribe(_ => {
+    this.authenticationService.updateProfile(data).subscribe({
       // Login again in order to update the token
-      this.authenticationService.login({email: email, password: newPassword}).subscribe({
-        next: (res: any) => {
-          localStorage.setItem('token', res.accessToken);
+      next: _ => this.authenticationService.login({email: email, password: newPassword}).subscribe(_ => {
+        localStorage.setItem('token', _.accessToken);
+        this.toastrService.success("Profile updated successfully!", "Profile update")
+      }),
+      error: (error: any) => {
+        if (error.error) {
+          this.errorMessage = error.error.message;
+        } else {
+          this.errorMessage = error.message;
         }
-      });
+      }
     });
   }
 

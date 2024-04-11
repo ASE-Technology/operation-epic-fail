@@ -1,0 +1,27 @@
+<ng-container *ngIf="files$ | async"></ng-container>
+
+<div class="container mt-5">
+    <h1 class="mb-3">File Management</h1>
+    <div class="card">
+        <div class="card-body">
+            <p class="card-text">Total List of the Uploade Files</p>
+            <button class="btn btn-outline-dark mb-3" (click)="onAddModalOpen()">Add New</button>
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">File Name</th>
+                        <th scope="col">Date Added</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let file of files; index as i;">
+                        <td>{{file.filename}}</td>
+                        <td>{{file.dateAdded | date}}</td>
+                        <td><button class="btn btn-outline-dark" (click)="onDownload(file)">Download</button> </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

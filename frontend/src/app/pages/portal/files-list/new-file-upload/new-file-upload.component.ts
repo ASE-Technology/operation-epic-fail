@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { FileService } from '../../services/file.service';
+import { FileService } from '../../../../services/file.service';
 
 @Component({
   selector: 'app-new-file-upload',

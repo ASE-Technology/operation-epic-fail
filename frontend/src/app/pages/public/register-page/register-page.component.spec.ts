@@ -1,12 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RegisterPageComponent } from './register-page.component';
-import { ApiService } from '../services/api.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Observable, of } from 'rxjs';
+import { AuthenticationService } from '../../../services/authentication.service';
 
-class MockApiService {
+class MockAuthenticationService {
   register(userData: any): Observable<any> {
     return of({ success: true });
   }
@@ -15,7 +15,7 @@ class MockApiService {
 describe('RegisterPageComponent', () => {
   let component: RegisterPageComponent;
   let fixture: ComponentFixture<RegisterPageComponent>;
-  let apiService: ApiService;
+  let authenticationService: AuthenticationService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -28,14 +28,14 @@ describe('RegisterPageComponent', () => {
         RouterTestingModule
       ],
       providers: [
-        { provide: ApiService, useClass: MockApiService }
+        { provide: AuthenticationService, useClass: MockAuthenticationService }
       ]
     })
     .compileComponents();
     
     fixture = TestBed.createComponent(RegisterPageComponent);
     component = fixture.componentInstance;
-    apiService = TestBed.inject(ApiService);
+    authenticationService = TestBed.inject(AuthenticationService);
     fixture.detectChanges();
   });
 
