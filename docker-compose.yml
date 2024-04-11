@@ -23,6 +23,8 @@ services:
       dockerfile: ./file-service/file-service/Dockerfile
     ports:
       - "5000:5000"
+    volumes:
+    - uploads:/app/uploads
     depends_on:
       - postgresql
       
@@ -47,3 +49,4 @@ services:
 volumes:
   mongodb_data:
   postgresql_data:
+  uploads:
