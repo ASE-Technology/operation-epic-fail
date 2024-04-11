@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "file-service", "file-servic
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "file-service.DAL", "..\file-service.DAL\file-service.DAL.csproj", "{CB08F855-E56B-4090-87E0-B14B0076CE4B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "file-service.tests", "..\file-service.test\file-service.tests.csproj", "{BA691F74-2E8A-40DA-9F9C-FFB7A2BB1286}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "file-service.Тests", "..\file-service.test\file-service.Тests.csproj", "{BA691F74-2E8A-40DA-9F9C-FFB7A2BB1286}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

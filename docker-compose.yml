@@ -20,7 +20,7 @@ services:
   file-service:
     build:
       context: .
-      dockerfile: ./file-service/Dockerfile
+      dockerfile: ./file-service/file-service/Dockerfile
     ports:
       - "5000:5000"
     depends_on:
