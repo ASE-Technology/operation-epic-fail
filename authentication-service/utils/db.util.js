@@ -12,11 +12,22 @@ const connect = async () => {
   }
 };
 
+const close = async () => {
+  try {
+    await client.close();
+    console.log("Disconnected from DB");
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
 const dbInstance = () => {
   return client.db();
 };
 
 module.exports = {
     connect,
+    close,
     dbInstance
 }
