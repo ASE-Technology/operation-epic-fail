@@ -24,3 +24,5 @@ app.use('/authentication', authRoute);
         console.log(`Server is up and running at PORT ${port}`);
     });
 })();
+
+module.exports = app;

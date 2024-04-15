@@ -70,12 +70,12 @@ async function updateProfile(req, res, next) {
 
         const userToUpdate = await repository.getUserById(req.user.id);
         if (!userToUpdate) {
-            return res.status(404).send({message: "User not found"});
+            return res.status(400).send({message: "User not found"});
         }
 
         const passwordIsValid = bcrypt.compareSync(updateProfile.oldPassword, userToUpdate.password);
         if (!passwordIsValid) {
-            return res.status(404).send({message: "Wrong old password"});
+            return res.status(400).send({message: "Wrong old password"});
         }
 
         userToUpdate.email = updateProfile.email;
