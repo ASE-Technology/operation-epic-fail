@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { PublicLayoutComponent } from './public-layout.component';
+import { ActivatedRoute } from '@angular/router';
+import { of } from 'rxjs';
 
 describe('PublicLayoutComponent', () => {
   let component: PublicLayoutComponent;
@@ -8,16 +9,24 @@ describe('PublicLayoutComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PublicLayoutComponent]
-    })
-    .compileComponents();
-    
+      imports: [PublicLayoutComponent],
+      providers: [
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            params: of({id: 'test'}), 
+            snapshot: { data: {} }
+          }
+        }
+      ]
+    }).compileComponents();
+
     fixture = TestBed.createComponent(PublicLayoutComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('should create the component', () => {
     expect(component).toBeTruthy();
   });
 });
